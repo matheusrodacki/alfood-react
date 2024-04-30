@@ -3,5 +3,5 @@ import IPrato from "./IPrato";
 export default interface IRestaurante {
   id: number
   nome: string
-  pratos: IPrato[]
+  pratos?: IPrato[]
 }
