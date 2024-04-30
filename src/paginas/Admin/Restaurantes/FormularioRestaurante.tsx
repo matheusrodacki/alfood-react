@@ -1,21 +1,43 @@
 import { Button, TextField } from '@mui/material';
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { baseURL } from '../../../shared/host';
+import { useParams } from 'react-router-dom';
+import IRestaurante from '../../../interfaces/IRestaurante';
 
 function FormularioRestaurante() {
+  const parametros = useParams();
+
+  useEffect(() => {
+    if (parametros.id) {
+      axios
+        .get<IRestaurante>(baseURL + `api/v2/restaurantes/${parametros.id}/`)
+        .then((response) => setNomeRestaurante(response.data.nome));
+    }
+  }, [parametros]);
+
   const [nomeRestaurante, setNomeRestaurante] = useState('');
 
   function aoSubmeterForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    axios
-      .post(baseURL + '/api/v2/restaurantes/', {
-        nome: nomeRestaurante,
-      })
-      .then(() => {
-        alert('Restaurante cadastrado com sucesso!');
-      });
+    if (parametros.id) {
+      axios
+        .put(baseURL + `/api/v2/restaurantes/${parametros.id}/`, {
+          nome: nomeRestaurante,
+        })
+        .then(() => {
+          alert('Restaurante atualizado com sucesso!');
+        });
+    } else {
+      axios
+        .post(baseURL + '/api/v2/restaurantes/', {
+          nome: nomeRestaurante,
+        })
+        .then(() => {
+          alert('Restaurante cadastrado com sucesso!');
+        });
+    }
   }
   return (
     <form onSubmit={aoSubmeterForm}>

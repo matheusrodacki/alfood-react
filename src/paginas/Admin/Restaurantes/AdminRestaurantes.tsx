@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { baseURL } from '../../../shared/host';
+import { Link } from 'react-router-dom';
 
 function AdminRestaurantes() {
   const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([]);
@@ -27,6 +28,7 @@ function AdminRestaurantes() {
         <TableHead>
           <TableRow>
             <TableCell>Nome</TableCell>
+            <TableCell>Editar</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -34,6 +36,13 @@ function AdminRestaurantes() {
             return (
               <TableRow key={restaurante.id}>
                 <TableCell>{restaurante.nome}</TableCell>
+                <TableCell>
+                  [
+                  <Link to={`/admin/restaurantes/${restaurante.id}`}>
+                    editar
+                  </Link>
+                  ]
+                </TableCell>
               </TableRow>
             );
           })}
