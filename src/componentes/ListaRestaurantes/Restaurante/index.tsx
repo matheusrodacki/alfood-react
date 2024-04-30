@@ -4,6 +4,7 @@ import Prato from '../Prato';
 import estilos from './Restaurante.module.scss';
 import IPrato from '../../../interfaces/IPrato';
 import axios from 'axios';
+import { baseURL } from '../../../shared/host';
 
 interface RestauranteProps {
   restaurante: IRestaurante;
@@ -14,9 +15,7 @@ const Restaurante = ({ restaurante }: RestauranteProps) => {
   useEffect(() => {
     //obter lista de restaurantes
     axios
-      .get<IPrato[]>(
-        `https://sturdy-umbrella-4vvwj6rgrxhq4pp-8000.app.github.dev/api/v1/restaurantes/${restaurante.id}/pratos/`
-      )
+      .get<IPrato[]>(`${baseURL}/api/v1/restaurantes/${restaurante.id}/pratos/`)
       .then((response) => {
         setPratos(response.data);
         console.log(pratos);

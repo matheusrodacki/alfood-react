@@ -10,15 +10,14 @@ import {
   TableRow,
 } from '@mui/material';
 import axios from 'axios';
+import { baseURL } from '../../../shared/host';
 
 function AdminRestaurantes() {
   const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([]);
 
   useEffect(() => {
     axios
-      .get<IRestaurante[]>(
-        'https://sturdy-umbrella-4vvwj6rgrxhq4pp-8000.app.github.dev/api/v2/restaurantes/'
-      )
+      .get<IRestaurante[]>(baseURL + '/api/v2/restaurantes/')
       .then((response) => setRestaurantes(response.data));
   }, []);
 

@@ -4,6 +4,7 @@ import style from './ListaRestaurantes.module.scss';
 import Restaurante from './Restaurante';
 import axios from 'axios';
 import { IPaginacao } from '../../interfaces/IPaginacao';
+import { baseURL } from '../../shared/host';
 
 const ListaRestaurantes = () => {
   const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([]);
@@ -12,18 +13,10 @@ const ListaRestaurantes = () => {
   useEffect(() => {
     //obter lista de restaurantes
     axios
-      .get<IPaginacao<IRestaurante>>(
-        'https://sturdy-umbrella-4vvwj6rgrxhq4pp-8000.app.github.dev/api/v1/restaurantes/'
-      )
+      .get<IPaginacao<IRestaurante>>(baseURL + 'api/v1/restaurantes/')
       .then((response) => {
         setRestaurantes(response.data.results);
-        const next = response.data.next;
-        setProximaPagina(
-          next.replace(
-            'http://localhost:8000',
-            'https://sturdy-umbrella-4vvwj6rgrxhq4pp-8000.app.github.dev'
-          )
-        );
+        setProximaPagina(response.data.next);
       })
       .catch((erro) => {
         console.log(erro);
