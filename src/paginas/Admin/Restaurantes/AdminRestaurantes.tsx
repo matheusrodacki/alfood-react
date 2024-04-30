@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import IRestaurante from '../../../interfaces/IRestaurante';
 import {
+  Button,
   Paper,
   Table,
   TableBody,
@@ -12,7 +13,6 @@ import {
 import axios from 'axios';
 import { baseURL } from '../../../shared/host';
 import { Link } from 'react-router-dom';
-
 function AdminRestaurantes() {
   const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([]);
 
@@ -22,6 +22,17 @@ function AdminRestaurantes() {
       .then((response) => setRestaurantes(response.data));
   }, []);
 
+  function excluir(restauranteExcluido: IRestaurante) {
+    axios
+      .delete(baseURL + `api/v2/restaurantes/${restauranteExcluido.id}/`)
+      .then(() => {
+        const listaRestaurantes = restaurantes.filter(
+          (restaurante) => restaurante.id !== restauranteExcluido.id
+        );
+        setRestaurantes([...listaRestaurantes]);
+      });
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -29,6 +40,7 @@ function AdminRestaurantes() {
           <TableRow>
             <TableCell>Nome</TableCell>
             <TableCell>Editar</TableCell>
+            <TableCell>Deletar</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -42,6 +54,14 @@ function AdminRestaurantes() {
                     editar
                   </Link>
                   ]
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant='outlined'
+                    color='error'
+                    onClick={() => excluir(restaurante)}>
+                    Excluir
+                  </Button>
                 </TableCell>
               </TableRow>
             );
