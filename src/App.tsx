@@ -3,21 +3,18 @@ import Home from './pages/Home';
 import VitrineRestaurantes from './pages/VitrineRestaurantes';
 import AdminRestaurantes from './pages/Admin/Restaurantes/AdminRestaurantes';
 import FormularioRestaurante from './pages/Admin/Restaurantes/FormularioRestaurante';
+import PaginaBaseAdmin from './pages/Admin/PaginaBaseAdmin';
 
 function App() {
   return (
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/restaurantes' element={<VitrineRestaurantes />} />
-      <Route path='/admin/restaurantes' element={<AdminRestaurantes />} />
-      <Route
-        path='/admin/restaurantes/novo'
-        element={<FormularioRestaurante />}
-      />
-      <Route
-        path='/admin/restaurantes/:id'
-        element={<FormularioRestaurante />}
-      />
+      <Route path='/admin' element={<PaginaBaseAdmin />}>
+        <Route path='restaurantes' element={<AdminRestaurantes />} />
+        <Route path='restaurantes/novo' element={<FormularioRestaurante />} />
+        <Route path='restaurantes/:id' element={<FormularioRestaurante />} />
+      </Route>
     </Routes>
   );
 }
