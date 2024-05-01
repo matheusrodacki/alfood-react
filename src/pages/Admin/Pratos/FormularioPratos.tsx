@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -7,13 +8,26 @@ import {
   Select,
   TextField,
   Typography,
+  styled,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import IPrato from '../../../interfaces/IPrato';
 import http from '../../../http';
 import ITag from '../../../interfaces/ITag';
 import IRestaurante from '../../../interfaces/IRestaurante';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 function FormularioPrato() {
   const parametros = useParams();
@@ -83,6 +97,10 @@ function FormularioPrato() {
         })
         .then(() => {
           alert('Prato atualizado com sucesso!');
+          setNomePrato('');
+          setDescricao('');
+          setTag('');
+          setRestaurante('');
         })
         .catch((erro) => console.log(erro));
     } else {
@@ -167,7 +185,17 @@ function FormularioPrato() {
           </Select>
         </FormControl>
 
-        <input type='file' onChange={selecionarArquivo} />
+        <Button
+          component='label'
+          role={undefined}
+          variant='contained'
+          tabIndex={-1}
+          startIcon={<CloudUploadIcon />}>
+          Upload file
+          <VisuallyHiddenInput type='file' onChange={selecionarArquivo} />
+        </Button>
+
+        {/* <TextField type='file' onChange={selecionarArquivo} /> */}
 
         <Button
           sx={{ marginTop: 1 }}
