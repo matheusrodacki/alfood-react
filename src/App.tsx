@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
-import Home from './paginas/Home';
-import VitrineRestaurantes from './paginas/VitrineRestaurantes';
-import AdminRestaurantes from './paginas/Admin/Restaurantes/AdminRestaurantes';
-import FormularioRestaurante from './paginas/Admin/Restaurantes/FormularioRestaurante';
+import Home from './pages/Home';
+import VitrineRestaurantes from './pages/VitrineRestaurantes';
+import AdminRestaurantes from './pages/Admin/Restaurantes/AdminRestaurantes';
+import FormularioRestaurante from './pages/Admin/Restaurantes/FormularioRestaurante';
 
 function App() {
   return (

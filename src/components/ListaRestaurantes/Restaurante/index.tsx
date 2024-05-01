@@ -17,7 +17,7 @@ const Restaurante = ({ restaurante }: RestauranteProps) => {
       .get<IPrato[]>(`v1/restaurantes/${restaurante.id}/pratos/`)
       .then((response) => {
         setPratos(response.data);
-        console.log(pratos);
+        console.log(response);
       })
       .catch((erro) => {
         console.log(erro);
