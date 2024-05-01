@@ -34,13 +34,20 @@ function FormularioPrato() {
     http
       .get<IRestaurante[]>('v2/restaurantes/')
       .then((response) => setRestaurantes(response.data));
-
-    if (parametros.id) {
-      http
-        .get<IPrato>(`v2/pratos/${parametros.id}/`)
-        .then((response) => setNomePrato(response.data.nome));
-    }
   }, []);
+
+  useEffect(() => {
+    if (parametros.id) {
+      http.get<IPrato>(`v2/pratos/${parametros.id}/`).then((response) => {
+        setNomePrato(response.data.nome);
+        setDescricao(response.data.descricao);
+        setTag(response.data.tag);
+        http
+          .get<IRestaurante>(`v2/restaurantes/${response.data.restaurante}/`)
+          .then((response) => setRestaurante(response.data.nome));
+      });
+    }
+  }, [restaurantes, parametros]);
 
   function selecionarArquivo(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.files?.length) {
@@ -53,24 +60,52 @@ function FormularioPrato() {
   function aoSubmeterForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    const formData = new FormData();
+
+    formData.append('nome', nomePrato);
+    formData.append('descricao', descricao);
+    formData.append('tag', tag);
+    formData.append('restaurante', restaurante);
+
+    if (imagem) {
+      formData.append('imagem', imagem);
+    }
+
     if (parametros.id) {
       http
-        .put(`v2/pratos/${parametros.id}/`, {
-          nome: nomePrato,
+        .request({
+          url: `v2/pratos/${parametros.id}/`,
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'multpart/form-data',
+          },
+          data: formData,
         })
         .then(() => {
           alert('Prato atualizado com sucesso!');
-        });
+        })
+        .catch((erro) => console.log(erro));
     } else {
       http
-        .post('v2/pratos/', {
-          nome: nomePrato,
+        .request({
+          url: 'v2/pratos/',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multpart/form-data',
+          },
+          data: formData,
         })
         .then(() => {
           alert('Prato cadastrado com sucesso!');
-        });
+          setNomePrato('');
+          setDescricao('');
+          setTag('');
+          setRestaurante('');
+        })
+        .catch((erro) => console.log(erro));
     }
   }
+
   return (
     <Box
       sx={{
@@ -111,7 +146,7 @@ function FormularioPrato() {
             value={tag}
             onChange={(event) => setTag(event.target.value)}>
             {tags.map((tag) => (
-              <MenuItem key={tag.id} value={tag.id}>
+              <MenuItem key={tag.id} value={tag.value}>
                 {tag.value}
               </MenuItem>
             ))}
