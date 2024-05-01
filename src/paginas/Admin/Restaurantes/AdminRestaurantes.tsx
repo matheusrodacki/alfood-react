@@ -10,27 +10,24 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import axios from 'axios';
-import { baseURL } from '../../../shared/host';
+import http from '../../../http';
 import { Link } from 'react-router-dom';
 function AdminRestaurantes() {
   const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([]);
 
   useEffect(() => {
-    axios
-      .get<IRestaurante[]>(baseURL + '/api/v2/restaurantes/')
+    http
+      .get<IRestaurante[]>('v2/restaurantes/')
       .then((response) => setRestaurantes(response.data));
   }, []);
 
   function excluir(restauranteExcluido: IRestaurante) {
-    axios
-      .delete(baseURL + `api/v2/restaurantes/${restauranteExcluido.id}/`)
-      .then(() => {
-        const listaRestaurantes = restaurantes.filter(
-          (restaurante) => restaurante.id !== restauranteExcluido.id
-        );
-        setRestaurantes([...listaRestaurantes]);
-      });
+    http.delete(`v2/restaurantes/${restauranteExcluido.id}/`).then(() => {
+      const listaRestaurantes = restaurantes.filter(
+        (restaurante) => restaurante.id !== restauranteExcluido.id
+      );
+      setRestaurantes([...listaRestaurantes]);
+    });
   }
 
   return (

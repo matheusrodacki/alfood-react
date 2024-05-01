@@ -1,17 +1,16 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { baseURL } from '../../../shared/host';
 import { useParams } from 'react-router-dom';
 import IRestaurante from '../../../interfaces/IRestaurante';
+import http from '../../../http';
 
 function FormularioRestaurante() {
   const parametros = useParams();
 
   useEffect(() => {
     if (parametros.id) {
-      axios
-        .get<IRestaurante>(baseURL + `api/v2/restaurantes/${parametros.id}/`)
+      http
+        .get<IRestaurante>(`v2/restaurantes/${parametros.id}/`)
         .then((response) => setNomeRestaurante(response.data.nome));
     }
   }, [parametros]);
@@ -22,16 +21,16 @@ function FormularioRestaurante() {
     event.preventDefault();
 
     if (parametros.id) {
-      axios
-        .put(baseURL + `/api/v2/restaurantes/${parametros.id}/`, {
+      http
+        .put(`v2/restaurantes/${parametros.id}/`, {
           nome: nomeRestaurante,
         })
         .then(() => {
           alert('Restaurante atualizado com sucesso!');
         });
     } else {
-      axios
-        .post(baseURL + '/api/v2/restaurantes/', {
+      http
+        .post('v2/restaurantes/', {
           nome: nomeRestaurante,
         })
         .then(() => {
